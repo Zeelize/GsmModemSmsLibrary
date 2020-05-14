@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using GsmModemSmsLibrary.Converters;
 
 namespace GsmModemSmsLibrary.Entities
 {
@@ -25,10 +26,10 @@ namespace GsmModemSmsLibrary.Entities
 
         public TextMessage(string text, string number, int tries)
         {
-            Text = text.Length > 160 ? text.Substring(0, 160) : text;
+            Text = AsciiConverter.ConvertTextToAscii(text.Length > 160 ? text.Substring(0, 160) : text);
             Number = number;
             NumberOfTries = tries;
             CurrentTry = 0;
-        }
+        }        
     }
 }
