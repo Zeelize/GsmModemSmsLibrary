@@ -9,8 +9,12 @@ namespace SampleModemProject
     {
         static void Main(string[] args)
         {
-            var modem = new GsmModem();            
-            if (!modem.InitializeConnection("COM3", 9600)) Console.WriteLine("ERROR: " + modem.LastError.Message);
+            var modem = new GsmModem();
+            Console.WriteLine("Port:");
+            var port = Console.ReadLine();
+            Console.WriteLine("Baud:");
+            var baud = int.Parse(Console.ReadLine());
+            if (!modem.InitializeConnection(port, baud)) Console.WriteLine("ERROR: " + modem.LastError.Message);
             else
             {
                 if (!modem.PhoneConnected) Console.WriteLine("PHONE NOT CONNECTED: " + modem.LastError.Message);
