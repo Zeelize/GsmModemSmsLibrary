@@ -1,11 +1,11 @@
 ﻿using GsmModemSmsLibrary.Enums;
 using System;
-using System.IO.Ports;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using GsmModemSmsLibrary.Entities;
 using System.Collections.Generic;
+using System.IO.Ports;
 
 namespace GsmModemSmsLibrary
 {    
