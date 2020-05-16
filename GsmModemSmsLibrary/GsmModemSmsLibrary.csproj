@@ -5,7 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.IO.Ports" Version="4.7.0" />
+    <PackageReference Include="crozone.SerialPorts.Abstractions" Version="2.0.3" />
+    <PackageReference Include="crozone.SerialPorts.LinuxSerialPort" Version="2.0.3" />
+    <PackageReference Include="crozone.SerialPorts.WindowsSerialPort" Version="2.0.2" />
   </ItemGroup>
 
 </Project>
