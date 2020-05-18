@@ -24,9 +24,9 @@ namespace GsmModemSmsLibrary
         private InputFlagEnum _inputFlag;
         private volatile bool _consume;
         private volatile bool _consuming;
-        private BlockingCollection<TextMessage> _smsQueue = new BlockingCollection<TextMessage>();
+        private readonly BlockingCollection<TextMessage> _smsQueue = new BlockingCollection<TextMessage>();
         private volatile string _lastReceived;
-        private ConcurrentBag<TextMessage> _notSend = new ConcurrentBag<TextMessage>();
+        private readonly ConcurrentBag<TextMessage> _notSend = new ConcurrentBag<TextMessage>();
 
         /// <summary>
         /// Last occured error in GsmModem library
@@ -105,17 +105,9 @@ namespace GsmModemSmsLibrary
         public void AddMessageToSend(TextMessage msg)
         {
             _smsQueue.Add(msg);
-        }
-
-        /// <summary>
-        /// Will start client consumer for sms messages. On seperate thread waiting for messages in queue to send
-        /// </summary>
-        public void StartSmsConsumer()
-        {
             if (_consuming) return;
-            _consume = true;
             Task.Run(() => SmsConsumerSender());
-        }
+        }        
 
         /// <summary>
         /// Returns copy of not send messages
@@ -178,9 +170,8 @@ namespace GsmModemSmsLibrary
         private void SmsConsumerSender()
         {
             _consuming = true;
-            while (_consume)
+            while (_smsQueue.TryTake(out var message) && _consume)
             {
-                if (!_smsQueue.TryTake(out var message)) continue;
                 try
                 {
                     var command = $"AT+CMGS={message.Number}\r";
