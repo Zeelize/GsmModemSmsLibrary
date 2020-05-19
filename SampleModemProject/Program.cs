@@ -2,6 +2,7 @@
 using GsmModemSmsLibrary;
 using GsmModemSmsLibrary.Entities;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SampleModemProject
 {
@@ -21,29 +22,31 @@ namespace SampleModemProject
                 else
                 {
                     Console.WriteLine("PHONE CONNECTED");
-                    modem.StartSmsConsumer();
                     Console.WriteLine("Phone number:");
                     var number = Console.ReadLine();
                     Console.WriteLine("Sms text:");
                     var smsText = Console.ReadLine();
                     Console.WriteLine("Num of sms:");
-                    var num = int.Parse(Console.ReadLine());
-                    for(var i = 0; i < num; i++)
+                    var num = int.Parse(Console.ReadLine());                    
+
+                    for (var i = 0; i < num; i++)
                     {
                         var k = i * 20;
                         var newText = smsText;
                         for (var j = 0; j <= k; j++) newText += 'o';
-                        var sms = new TextMessage(newText, number, 3);
-                        modem.AddMessageToSend(sms);
-                    }                    
+                        var sms = new TextMessage(newText, number);
+                        Manager.AddSms(sms, modem);
+                    }
+
                 }
             }
 
             Console.WriteLine("Press any key to close...");
             Console.ReadKey();
-            var notSend = modem.GetNotSendMessages();
-            Console.WriteLine("Not send: " + notSend.Count());
+            Manager.End();
             modem.Close();
+            modem.Dispose();
+            Console.ReadKey();
         }
     }
 }
