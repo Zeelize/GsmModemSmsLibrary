@@ -9,7 +9,7 @@ namespace GsmModemSmsLibrary.Converters
         private static readonly Dictionary<char, char> _mappings = new Dictionary<char, char>()
         {
             {'á', 'a'},
-            {'č', 'č'},
+            {'č', 'c'},
             {'ď', 'd'},
             {'é', 'e'},
             {'ě', 'e'},

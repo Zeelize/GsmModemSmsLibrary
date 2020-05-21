@@ -155,6 +155,7 @@ namespace GsmModemSmsLibrary
         {
             _inputFlag = flag;
             var bytes = Encoding.ASCII.GetBytes(command);
+            Thread.Sleep(100);
             _serialPort.BaseStream.Write(bytes, 0, bytes.Length);
             _serialPort.BaseStream.Flush();
         }
@@ -163,7 +164,8 @@ namespace GsmModemSmsLibrary
         #region Consumer
         public bool SendSms(TextMessage message)
         {
-            if (_sending) return false;
+            if (_sending)
+                return false;
             _sending = true;
             try
             {

@@ -3,10 +3,11 @@ using GsmModemSmsLibrary;
 using GsmModemSmsLibrary.Entities;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace SampleModemProject
 {
-    class Program
+    internal class Program
     {
         static void Main(string[] args)
         {
@@ -22,22 +23,25 @@ namespace SampleModemProject
                 else
                 {
                     Console.WriteLine("PHONE CONNECTED");
-                    Console.WriteLine("Phone number:");
-                    var number = Console.ReadLine();
-                    Console.WriteLine("Sms text:");
-                    var smsText = Console.ReadLine();
-                    Console.WriteLine("Num of sms:");
-                    var num = int.Parse(Console.ReadLine());                    
-
-                    for (var i = 0; i < num; i++)
+                    Console.WriteLine("Phone numbers:");
+                    var numbers = Console.ReadLine().Split(';');
+                    do
                     {
-                        var k = i * 20;
-                        var newText = smsText;
-                        for (var j = 0; j <= k; j++) newText += 'o';
-                        var sms = new TextMessage(newText, number);
-                        Manager.AddSms(sms, modem);
-                    }
+                        Console.WriteLine("Sms text:");
+                        var smsText = Console.ReadLine();
+                        Console.WriteLine("Num of sms:");
+                        var num = int.Parse(Console.ReadLine());
 
+                        for (var i = 0; i < num; i++)
+                        {
+                            numbers = Extensions.Randomize<string>(numbers).ToArray();
+                            foreach (var number in numbers)
+                            {
+                                var sms = new TextMessage(smsText, number, 3);
+                                Manager.AddSms(sms, modem);
+                            }
+                        }
+                    } while (Console.ReadLine() == "y");
                 }
             }
 
@@ -47,6 +51,6 @@ namespace SampleModemProject
             modem.Close();
             modem.Dispose();
             Console.ReadKey();
-        }
+        }        
     }
 }

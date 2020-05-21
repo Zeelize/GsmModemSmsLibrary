@@ -30,11 +30,24 @@ namespace SampleModemProject
             _consuming = true;
             while (_consume && _smsQueue.TryTake(out var message))
             {
+                if (message.NextTry.HasValue && message.NextTry.Value > DateTime.Now)
+                {
+                    // its still not time to send this next try, so add it back to queue and proceed to the next planned sms
+                    _smsQueue.Add(message);
+                    continue;
+                }
                 if (!modem.SendSms(message))
                 {
                     message.CurrentTry++;
-                    _notSend.Add(message);                    
-                }                
+                    if (message.CurrentTry > message.NumberOfTries)
+                        _notSend.Add(message);
+                    else
+                    {
+                        message.NextTry = DateTime.Now.AddMinutes(3);
+                        _smsQueue.Add(message);                        
+                    }                    
+                }
+                Thread.Sleep(500);
             }
             _consuming = false;
         }       
