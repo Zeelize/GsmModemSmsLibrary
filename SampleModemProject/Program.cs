@@ -22,6 +22,7 @@ namespace SampleModemProject
                 if (!modem.PhoneConnected) Console.WriteLine("PHONE NOT CONNECTED: " + modem.LastError.Message);
                 else
                 {
+                    Manager.SetModem(modem);
                     Console.WriteLine("PHONE CONNECTED");
                     Console.WriteLine("Phone numbers:");
                     var numbers = Console.ReadLine().Split(';');
@@ -37,8 +38,13 @@ namespace SampleModemProject
                             numbers = Extensions.Randomize<string>(numbers).ToArray();
                             foreach (var number in numbers)
                             {
-                                var sms = new TextMessage(smsText, number, 3);
-                                Manager.AddSms(sms, modem);
+                                var sms = new TextMessage(DateTime.Now + " - " + smsText + i, number, 3);
+                                if (i == num - 1) sms.NextTry = DateTime.Now.AddMinutes(1);
+                                if (i == num - 2) sms.NextTry = DateTime.Now.AddMinutes(2);
+                                if (i == num - 3) sms.NextTry = DateTime.Now.AddMinutes(4);
+                                if (i == num - 5) sms.NextTry = DateTime.Now.AddMinutes(6);
+                                Manager.AddSms(sms);
+                                Console.WriteLine("Added:" + sms.Text);
                             }
                         }
                     } while (Console.ReadLine() == "y");

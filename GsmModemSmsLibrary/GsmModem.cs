@@ -11,7 +11,7 @@ using crozone.SerialPorts.LinuxSerialPort;
 using crozone.SerialPorts.WindowsSerialPort;
 
 namespace GsmModemSmsLibrary
-{    
+{
     /// <summary>
     /// Class representing GSMModem including methods to invoke connection and sms sending with SerialPorts
     /// </summary>
@@ -32,7 +32,7 @@ namespace GsmModemSmsLibrary
         /// <summary>
         /// Flag if phone is connected to serialPort, command <AT> returns 0
         /// </summary>
-        public bool PhoneConnected { get; private set; }        
+        public bool PhoneConnected { get; private set; }
 
         /// <summary>
         /// Initialize connection to serial port with correct settings
@@ -57,7 +57,7 @@ namespace GsmModemSmsLibrary
                 };
                 else if (OperatingSystem.IsWindows()) _serialPort = new WindowsSerialPort(new System.IO.Ports.SerialPort(portName))
                 {
-                    ReadTimeout = WAIT_TIMEOUT,                    
+                    ReadTimeout = WAIT_TIMEOUT,
                     BaudRate = baudRate,
                     Parity = parity,
                     DataBits = dataBits,
@@ -65,12 +65,13 @@ namespace GsmModemSmsLibrary
                     Handshake = Handshake.None
                 };
                 else throw new Exception("Not supported Opearting System");
-
-                    _serialPort.Open();
+                _serialPort.Open();
                 if (!_serialPort.IsOpen) throw new InvalidOperationException("Serial port could not be opened!");
-                AtCommand("AT\r", InputFlagEnum.PhoneConnectionCheck);
+                _serialPort.BaseStream.WriteTimeout = WAIT_TIMEOUT;
+                if (!AtCommand("AT\r", InputFlagEnum.PhoneConnectionCheck)) throw new TimeoutException("Could not write to modem!");
                 if (!ModemReadResponseTimeout()) throw new TimeoutException("Expected response, modem did not respond in time!");
-            } catch(Exception e)
+            }
+            catch (Exception e)
             {
                 LastError = e;
                 return false;
@@ -84,7 +85,7 @@ namespace GsmModemSmsLibrary
         public void Close()
         {
             if (_serialPort == null) return;
-            _serialPort.Close();            
+            _serialPort.Close();
         }
 
         public void Dispose()
@@ -139,10 +140,11 @@ namespace GsmModemSmsLibrary
                 try
                 {
                     bytesReceived = _serialPort.BaseStream.Read(buffer, totalBytesReceived, buffer.Length - totalBytesReceived);
-                } catch (TimeoutException)
+                }
+                catch (TimeoutException)
                 {
                     bytesReceived = 0;
-                }                
+                }
                 totalBytesReceived += bytesReceived;
                 if (bytesReceived <= 0) break;
                 if (totalBytesReceived >= buffer.Length) break;
@@ -151,13 +153,21 @@ namespace GsmModemSmsLibrary
             return Encoding.ASCII.GetString(buffer, 0, totalBytesReceived);
         }
 
-        private void AtCommand(string command, InputFlagEnum flag)
+        private bool AtCommand(string command, InputFlagEnum flag)
         {
-            _inputFlag = flag;
-            var bytes = Encoding.ASCII.GetBytes(command);
-            Thread.Sleep(100);
-            _serialPort.BaseStream.Write(bytes, 0, bytes.Length);
-            _serialPort.BaseStream.Flush();
+            try
+            {
+                _inputFlag = flag;
+                var bytes = Encoding.ASCII.GetBytes(command);
+                Thread.Sleep(100);
+                _serialPort.BaseStream.Write(bytes, 0, bytes.Length);
+                _serialPort.BaseStream.Flush();
+                return true;
+            }
+            catch (TimeoutException)
+            {
+                return false;
+            }
         }
         #endregion
 
@@ -170,9 +180,9 @@ namespace GsmModemSmsLibrary
             try
             {
                 var command = $"AT+CMGS={message.Number}\r";
-                AtCommand(command, InputFlagEnum.SmsHeaderCheck);
+                if (!AtCommand(command, InputFlagEnum.SmsHeaderCheck)) throw new Exception();
                 if (!ModemReadResponseTimeout() || _lastReceived == null) throw new Exception();
-                AtCommand(message.Text + CTRL_Z, InputFlagEnum.SmsSendCheck);
+                if (!AtCommand(message.Text + CTRL_Z, InputFlagEnum.SmsSendCheck)) throw new Exception();
                 if (!ModemReadResponseTimeout() || _lastReceived == null) throw new Exception();
             }
             catch (Exception)
