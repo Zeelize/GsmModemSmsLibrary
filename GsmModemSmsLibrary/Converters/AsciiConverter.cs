@@ -22,7 +22,8 @@ namespace GsmModemSmsLibrary.Converters
             {'ů', 'u'},
             {'ň', 'n'},
             {'ó', 'o'},
-            {'ť', 't'}            
+            {'ť', 't'},
+            {'_', '.'}            
         };
 
         public static string ConvertTextToAscii(string original)
@@ -31,12 +32,12 @@ namespace GsmModemSmsLibrary.Converters
             for (var i = 0; i < original.Length; i++)
             {
                 int decValue = original[i];
-                if (decValue >= 32 && decValue <= 127) convert += original[i];
+                if ((decValue >= 32 && decValue <= 90) || (decValue >= 97 && decValue <= 122)) convert += original[i];
                 else
                 {
                     var lowerChar = char.ToLower(original[i]);
                     if (_mappings.ContainsKey(lowerChar)) convert += _mappings[lowerChar];
-                    else convert += '.';
+                    else convert += ' ';
                 }                
             }
             return convert;

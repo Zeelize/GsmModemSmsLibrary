@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.29123.88
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GsmModemSmsLibrary", "GsmModemSmsLibrary\GsmModemSmsLibrary.csproj", "{697AA26C-40EB-4700-8630-6DE5060D23D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleModemProject", "SampleModemProject\SampleModemProject.csproj", "{53DE35C1-BC9B-49CD-834E-D8479DA6877F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleModemProject", "SampleModemProject\SampleModemProject.csproj", "{53DE35C1-BC9B-49CD-834E-D8479DA6877F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GsmModemSmsTests", "GsmModemSmsTests\GsmModemSmsTests.csproj", "{A810C1B0-3505-4C1B-A208-0758721DF34A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{53DE35C1-BC9B-49CD-834E-D8479DA6877F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53DE35C1-BC9B-49CD-834E-D8479DA6877F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53DE35C1-BC9B-49CD-834E-D8479DA6877F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A810C1B0-3505-4C1B-A208-0758721DF34A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A810C1B0-3505-4C1B-A208-0758721DF34A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A810C1B0-3505-4C1B-A208-0758721DF34A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A810C1B0-3505-4C1B-A208-0758721DF34A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
