@@ -67,7 +67,7 @@ namespace GsmModemSmsLibrary
                 else throw new Exception("Not supported Opearting System");
                 _serialPort.Open();
                 if (!_serialPort.IsOpen) throw new InvalidOperationException("Serial port could not be opened!");
-                _serialPort.BaseStream.WriteTimeout = WAIT_TIMEOUT;
+                if (OperatingSystem.IsWindows()) _serialPort.BaseStream.WriteTimeout = WAIT_TIMEOUT;
                 if (!AtCommand("AT\r", InputFlagEnum.PhoneConnectionCheck)) throw new TimeoutException("Could not write to modem!");
                 if (!ModemReadResponseTimeout()) throw new TimeoutException("Expected response, modem did not respond in time!");
             }
