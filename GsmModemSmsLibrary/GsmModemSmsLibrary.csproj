@@ -2,6 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Authors>Vojtech Mraz</Authors>
+    <Company>TRONIC CONTROL</Company>
+    <Description>Knihovna pro propojeni GSM Modemu a zasílání SMS zpráv pomocí AT+ commandů. Podpora pro Windows i Linux OS.</Description>
   </PropertyGroup>
 
   <ItemGroup>
