@@ -112,7 +112,7 @@ namespace GsmModemSmsLibrary
                 case InputFlagEnum.PhoneConnectionCheck:
                     PhoneConnected = string.Equals("0\r", input);
                     if (!PhoneConnected)
-                        LastError = new FormatException($"Serial port response: {input}");
+                        LastError = new FormatException($"Serial port response. RESPONSE: <{input}>");
                     break;
                 case InputFlagEnum.SmsHeaderCheck:
                     if (!input.Contains(">")) break;
