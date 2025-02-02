@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1;net48</TargetFrameworks>
+    <TargetFrameworks>net8;net48</TargetFrameworks>
     <Authors>Vojtech Mraz</Authors>
     <Company>TRONIC CONTROL</Company>
     <Description>Library to handle connection to GSM Modem and sending sms using AT+ commands. Support for both Windows and Linux OS.</Description>
-    <Version>1.0.2</Version>
+    <Version>2.0.0</Version>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>TRONIC.$(AssemblyName)</PackageId>
     <Product>TRONIC.$(AssemblyName)</Product>
